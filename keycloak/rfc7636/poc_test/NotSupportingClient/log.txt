@@ -1,0 +1,68 @@
+RFC 7363 Not Supporting Client
+
+[Request Authorizaiton Code]
+<Browser Log>
+http://localhost:8180/auth/realms/demo/protocol/openid-connect/auth?
+response_type=code
+&client_id=third-party
+&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth-client%2Fpull_data.jsp
+&state=0%2F302d8844-7290-40de-8035-748020b526d3
+&scope=openid
+
+<Client Web Server Log>
+2016-12-21 10:01:01,579 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-1) url = http://localhost:8180/auth/realms/demo/protocol/openid-connect/auth?response_type=code&client_id=third-party&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth-client%2Fpull_data.jsp&state=0%2F302d8844-7290-40de-8035-748020b526d3&scope=openid
+
+-----
+
+[Response for Authorizaiton Code Request]
+<Browser Log>
+http://localhost:8180/auth/realms/demo/login-actions/authenticate?
+code=h0lFWSQO2xnmFhej--E05azzokLlGA5nQp9XcT1bcOA.6f252f14-8b4c-4643-8798-5e7a7b2f4a88
+&execution=9cf8c5a3-eaca-4021-87e9-11167ca10b53
+
+<Authorizaiton Web Server Log>
+2016-12-21 10:01:01,690 INFO  [org.keycloak.protocol.oidc.endpoints.AuthorizationEndpoint] (default task-1) PKCE non-supporting Client
+
+-----
+
+[Request Token]
+<Packet Capture>
+
+POST /auth/realms/demo/protocol/openid-connect/token HTTP/1.1\r\n
+Form item: "grant_type" = "authorization_code"
+Form item: "code" = "eNvvpWHTNfxNAMLsFNjOSghKq4sMMPhw188gYbpqdiw.6f252f14-8b4c-4643-8798-5e7a7b2f4a88"
+Form item: "redirect_uri" = "http://localhost:8080/oauth-client/pull_data.jsp"
+Form item: "code_verifier" = "qLGPjA0U2xZ1C52azIuTlmtPBFGInXB5vg1ckofMaG8"
+
+-----
+
+[Response for Token Request]
+<Packet Capture>
+
+HTTP/1.1 200 OK\r\n
+
+Member Key: "access_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiIwNDQ5ZDJhNC00N2MzLTQyZmEtOWQwOC02ZmY5NTIwNzkzMmUiLCJleHAiOjE0ODIyODIxNDQsIm5iZiI6MCwiaWF0IjoxNDgyMjgyMDg0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidGhpcmQtcGFydHkiLCJhdXRoX3RpbWUiOjE0ODIyODIwODQsInNlc3Npb25fc3RhdGUiOiI5NGY5ZGNiNS01M2U4LTRhM2EtODY4Zi01YTFmZWM0NTA2MmUiLCJhY3IiOiIxIiwiY2xpZW50X3Nlc3Npb24iOiI2ZjI1MmYxNC04YjRjLTQ2NDMtODc5OC01ZTdhN2IyZjRhODgiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7fSwibmFtZSI6Ik1hcmVrIFBvc29sZGEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtcG9zb2xkYUByZWRoYXQuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1hcmVrIiwiZmFtaWx5X25hbWUiOiJQb3NvbGRhIiwiZW1haWwiOiJtcG9zb2xkYUByZWRoYXQuY29tIn0.XZGUHfVVcn8Z1LQhphEkwFXaXVMj85GvDb2iens2AHBmgMQx5RKzme0OZnAdEhOcPAG-6PWuPTOyuRdOqaK93Afead8VCX4WghJSlPD1slnLdzknHD1v46ilMJ0gID9GzGZbtp3UxN0Qjoumo8S2sr-guiWprZCmHClZ15QRTKU
+
+Member Key: "expires_in"
+Number value: 60
+
+Member Key: "refresh_expires_in"
+Number value: 600
+
+Member Key: "refresh_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiI2MDZlNzcyNS00M2U1LTQ2NWQtOTliNi1iOGJjNGU2N2NhMDAiLCJleHAiOjE0ODIyODI2ODQsIm5iZiI6MCwiaWF0IjoxNDgyMjgyMDg0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRoaXJkLXBhcnR5IiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiOTRmOWRjYjUtNTNlOC00YTNhLTg2OGYtNWExZmVjNDUwNjJlIiwiY2xpZW50X3Nlc3Npb24iOiI2ZjI1MmYxNC04YjRjLTQ2NDMtODc5OC01ZTdhN2IyZjRhODgiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7fX0.pvQiqgUB49x5wTI0X8Ad2I0kIeB2_RYAbEOx51lFzX_kIevT2xrXISzGWVAn9kidmmmI4ASfIV9KZTAkQGc9ZuNTG6He-sYNrp7FTNCvNZzb5wH1Kkq4hSGayiMkhe8BWCMHGMw0dtacoRl7W5Ww1DbQsHhnr9Iv-T0XJYviTAE
+
+Member Key: "token_type"
+String value: bearer
+
+Member Key: "id_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiIwNGExNzk3Ni1lZGE1LTQ0MDYtOTk4MC1kODNmOTI3Zjk2NmIiLCJleHAiOjE0ODIyODIxNDQsIm5iZiI6MCwiaWF0IjoxNDgyMjgyMDg0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiSUQiLCJhenAiOiJ0aGlyZC1wYXJ0eSIsImF1dGhfdGltZSI6MTQ4MjI4MjA4NCwic2Vzc2lvbl9zdGF0ZSI6Ijk0ZjlkY2I1LTUzZTgtNGEzYS04NjhmLTVhMWZlYzQ1MDYyZSIsImFjciI6IjEiLCJuYW1lIjoiTWFyZWsgUG9zb2xkYSIsInByZWZlcnJlZF91c2VybmFtZSI6Im1wb3NvbGRhQHJlZGhhdC5jb20iLCJnaXZlbl9uYW1lIjoiTWFyZWsiLCJmYW1pbHlfbmFtZSI6IlBvc29sZGEiLCJlbWFpbCI6Im1wb3NvbGRhQHJlZGhhdC5jb20ifQ.V_HOH9OPYtUHEy97nFBTHg572yU-QjwxI7_5oYbPY9rKn3Awu6-662HrSisv66mGcObDq-H-49i--WjXv20IlovPzZMfbje7AVZebE4bVEp0eNhAcPd9SMcmaa-VdB9-k8ixnKW-iSnjjkOoSjxkObhmDnzyDjtAsLkAcFG-c98
+
+Member Key: "not-before-policy"
+Number value: 0
+
+Member Key: "session_state"
+String value: 94f9dcb5-53e8-4a3a-868f-5a1fec45062e
+
+
