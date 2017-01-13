@@ -1,0 +1,67 @@
+RFC 7363 Supporting Valid Client
+
+[Request Authorizaiton Code]
+<Browser Log>
+http://localhost:8180/auth/realms/demo/protocol/openid-connect/auth?
+response_type=code&client_id=third-party
+&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth-client%2Fpull_data.jsp
+&state=3%2F174c8ae5-afee-4c54-90b3-00bf3f59dba1&scope=openid
+&code_challenge=MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA
+&code_challenge_method=S256
+
+<Client Web Server Log>
+2016-12-21 08:59:50,157 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-10) Generated codeVerifier = 5mlym9TYhvAq3uDk7S3626SlrBjjPbVCChF4th3PWjM
+2016-12-21 08:59:50,158 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-10) Encode codeChallenge = MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA, codeChallengeMethod = S256
+2016-12-21 08:59:50,159 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-10) Before sending Authz Code Request, codeChallenge = MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA, codeChallengeMethod = S256
+2016-12-21 08:59:50,160 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-10) url = http://localhost:8180/auth/realms/demo/protocol/openid-connect/auth?response_type=code&client_id=third-party&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth-client%2Fpull_data.jsp&state=3%2F174c8ae5-afee-4c54-90b3-00bf3f59dba1&scope=openid&code_challenge=MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA&code_challenge_method=S256
+2016-12-21 09:00:26,348 INFO  [org.keycloak.servlet.ServletOAuthClient] (default task-11) Before sending Token Request, codeVerifier = 5mlym9TYhvAq3uDk7S3626SlrBjjPbVCChF4th3PWjM
+2016-12-21 09:00:26,348 INFO  [org.keycloak.adapters.ServerRequest] (default task-11) add to POST parameters of Token Request, codeVerifier = 5mlym9TYhvAq3uDk7S3626SlrBjjPbVCChF4th3PWjM
+
+[Response for Authorizaiton Code Request]
+<Browser Log>
+http://localhost:8180/auth/realms/demo/login-actions/authenticate?
+code=5Lb98-PLNM231G6-8YVXc9arYCQrJaB4u6LdtLAOX6s.4f915501-0147-4936-911e-64f785f49b02.MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA.S256
+&execution=9cf8c5a3-eaca-4021-87e9-11167ca10b53
+
+<Authorizaiton Web Server Log>
+2016-12-21 09:00:26,332 INFO  [org.keycloak.services.managers.ClientSessionCode] (default task-20) PKCE received codeChallenge = MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA
+2016-12-21 09:00:26,333 INFO  [org.keycloak.services.managers.ClientSessionCode] (default task-20) PKCE received codeChallengeMethod = S256
+2016-12-21 09:00:26,353 INFO  [org.keycloak.protocol.oidc.endpoints.TokenEndpoint] (default task-18) PKCE supporting Client
+2016-12-21 09:00:26,353 INFO  [org.keycloak.protocol.oidc.endpoints.TokenEndpoint] (default task-18) PKCE codeChallengeMethod = S256
+
+[Request Token]
+<Packet Capture>
+
+POST /auth/realms/demo/protocol/openid-connect/token HTTP/1.1\r\n
+Form item: "grant_type" = "authorization_code"
+Form item: "code" = "1YYmyLLtjEV7gdI-Mm-khO2WBADF_NBnDHKkMeK78kA.4f915501-0147-4936-911e-64f785f49b02.MWE4ZjY3NzI0NmFlYTkyMzE5NzM1MDMzZmQzYjRkZDlhYTQ3MzVkODkzYTRkOGMwOGFhZTU0ZDE4MzI1ZTFmNA.S256"
+Form item: "redirect_uri" = "http://localhost:8080/oauth-client/pull_data.jsp"
+Form item: "code_verifier" = "5mlym9TYhvAq3uDk7S3626SlrBjjPbVCChF4th3PWjM"
+
+[Response for Token Request]
+<Packet Capture>
+
+Member Key: "access_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiJiZDhhODQyZS1kMmM3LTQwNGQtYTNiMy0wZTQzZTNkZjc0YTMiLCJleHAiOjE0ODIyNzg0ODYsIm5iZiI6MCwiaWF0IjoxNDgyMjc4NDI2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidGhpcmQtcGFydHkiLCJhdXRoX3RpbWUiOjE0ODIyNzg0MjYsInNlc3Npb25fc3RhdGUiOiJjNzY3MWFkMy0zNTljLTQ1ODAtOTMwZC03MjRiYzY3NTYyNTkiLCJhY3IiOiIxIiwiY2xpZW50X3Nlc3Npb24iOiI0ZjkxNTUwMS0wMTQ3LTQ5MzYtOTExZS02NGY3ODVmNDliMDIiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7fSwibmFtZSI6Ik1hcmVrIFBvc29sZGEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtcG9zb2xkYUByZWRoYXQuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1hcmVrIiwiZmFtaWx5X25hbWUiOiJQb3NvbGRhIiwiZW1haWwiOiJtcG9zb2xkYUByZWRoYXQuY29tIn0.dQa9HQwxZvp93Rxsm1VjaMPu3FPa1IBwL2-uWvp_-VJ2Lt7xYIsAYNCLB-EliyOLyb0q2aLU49vvXNFXdz8-j_pmWbD3PqKrlXoo_aMk8ihUcRWK9AFjiDmlPrAZQSc7wtYtocLbaKC0MT4kEBOx5tmlaeZ1gDWuFE6DHBXJrI0
+
+Member Key: "expires_in"
+Number value: 60
+
+Member Key: "refresh_expires_in"
+Number value: 600
+
+Member Key: "refresh_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiI5MDc4MDcwZC0zNjE1LTQ3N2MtYmVmZC1kZDRlY2QzNTVkZDEiLCJleHAiOjE0ODIyNzkwMjYsIm5iZiI6MCwiaWF0IjoxNDgyMjc4NDI2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRoaXJkLXBhcnR5IiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiYzc2NzFhZDMtMzU5Yy00NTgwLTkzMGQtNzI0YmM2NzU2MjU5IiwiY2xpZW50X3Nlc3Npb24iOiI0ZjkxNTUwMS0wMTQ3LTQ5MzYtOTExZS02NGY3ODVmNDliMDIiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7fX0.G2t48xCcOtZpWGSoNftq6KS5UN9BB_i_eT8DDPA3lgNFXqNOcF68dil5yX1YSJ9CH5rJNAFh3ww4X4RxlqfYMa8cGJRuujZ36fRpZv_Zj3qyWpaIW1hgHMSj7w_cZK0T0ojJ90R-nrZ_QFxknuBJKz0LcSO5_Pp17wOJFWHlC7Y
+
+Member Key: "token_type"
+String value: bearer
+
+Member Key: "id_token"
+String value: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiIwNDRkMDE4OS00YWNiLTQ3YWMtODhmNC04NzA3OGIyYWQwMmIiLCJleHAiOjE0ODIyNzg0ODYsIm5iZiI6MCwiaWF0IjoxNDgyMjc4NDI2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvZGVtbyIsImF1ZCI6InRoaXJkLXBhcnR5Iiwic3ViIjoiNTFkNWRiYmYtMGNiYy00NTAwLWFmNzUtNjdjMzFmNmZiNDVjIiwidHlwIjoiSUQiLCJhenAiOiJ0aGlyZC1wYXJ0eSIsImF1dGhfdGltZSI6MTQ4MjI3ODQyNiwic2Vzc2lvbl9zdGF0ZSI6ImM3NjcxYWQzLTM1OWMtNDU4MC05MzBkLTcyNGJjNjc1NjI1OSIsImFjciI6IjEiLCJuYW1lIjoiTWFyZWsgUG9zb2xkYSIsInByZWZlcnJlZF91c2VybmFtZSI6Im1wb3NvbGRhQHJlZGhhdC5jb20iLCJnaXZlbl9uYW1lIjoiTWFyZWsiLCJmYW1pbHlfbmFtZSI6IlBvc29sZGEiLCJlbWFpbCI6Im1wb3NvbGRhQHJlZGhhdC5jb20ifQ.NmuT30ZX2MK-2lom4dbep30AxpiYsItQTpGoZkkSw0UTNLhJP2lludBYgxU-Ibkwh2Chedi-2P0kXfhd9tW5sRvLiEMHzWM3eUk__Tz9MrBpDlgGev5Kr8JzWxWNLTzi_RdrQp7dDBJHWsyo4w3kBkJaY43gNAvoV3Cc-us2gbc
+
+Member Key: "not-before-policy"
+Number value: 0
+
+Member Key: "session_state"
+String value: c7671ad3-359c-4580-930d-724bc6756259
+
